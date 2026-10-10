@@ -99,6 +99,8 @@ PS> docker network inspect my-bridge-net
 ]
 ```
 
+![Network setup: git pull, network create, ls, inspect](images/exercise4-network-setup.png)
+
 **4-5. Build and launch all three containers:**
 ```
 PS> docker build -t flask-api .
@@ -142,6 +144,8 @@ Content           : {
                         "version": "1.0"
                     }
 ```
+
+![DNS resolution inside the container and successful curl to /about](images/exercise4-connectivity-test.png)
 
 ## Notes
 
