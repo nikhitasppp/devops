@@ -81,6 +81,8 @@ PS C:\WINDOWS\System32> minikube service hello-k8s
 
 Browser opened at `http://127.0.0.1:50249` showing the standard "Welcome to nginx!" page — confirmed working.
 
+![Nginx welcome page](images/exercise1-nginx-welcome.png)
+
 ## Notes
 
 - `kubectl get nodes` showed `NotReady` right after `minikube start` finished — this is normal, the node just needs a few seconds for the CNI/kubelet to finish initializing. A second `kubectl get nodes` a bit later showed `Ready`.
