@@ -9,23 +9,24 @@
 
 ## Steps
 
-1. (Optional clean slate) Reset Minikube to a single node:
+1. Clean slate — reset Minikube to a single node:
    ```bash
    minikube stop
    minikube delete
    minikube start --nodes=1 --driver=docker
    ```
 
-2. Build and load the image (same pattern as Exercise 2 — host Docker build, then load into Minikube):
+2. Build and load the image:
    ```bash
    cd exercise3
    docker build -t flashsale:1.0 .
    minikube image load flashsale:1.0
+   cd ..
    ```
 
 3. Apply the ReplicaSet + Service:
    ```bash
-   kubectl apply -f flashsale-replicaset.yaml
+   kubectl apply -f exercise3/flashsale-replicaset.yaml
    ```
 
 4. Verify the 3 pods and the ReplicaSet:
@@ -43,18 +44,68 @@
 
 6. Kill one pod and watch Kubernetes replace it automatically:
    ```bash
-   kubectl delete pod <one-of-the-pod-names-from-above>
+   kubectl delete pod <pod-name>
    kubectl get pods
    ```
 
-7. See pod distribution (all on the one node, since we're running `--nodes=1`):
+7. See pod distribution across nodes:
    ```bash
    kubectl get pods -o wide
    ```
 
 ## Result
 
-_(to fill in: actual output of each command above)_
+```
+PS> kubectl apply -f exercise3\flashsale-replicaset.yaml
+replicaset.apps/flashsale-rs created
+service/flashsale-svc created
+
+PS> kubectl get pods
+NAME                  READY   STATUS    RESTARTS   AGE
+flashsale-rs-c5dxj    1/1     Running   0          7s
+flashsale-rs-sp94x    1/1     Running   0          7s
+flashsale-rs-wnxrv    1/1     Running   0          7s
+
+PS> kubectl get rs
+NAME           DESIRED   CURRENT   READY   AGE
+flashsale-rs   3         3         3       16s
+
+PS> kubectl scale rs flashsale-rs --replicas=5
+replicaset.apps/flashsale-rs scaled
+
+PS> kubectl get rs
+NAME           DESIRED   CURRENT   READY   AGE
+flashsale-rs   5         5         5       80s
+
+PS> kubectl get pods
+NAME                  READY   STATUS    RESTARTS   AGE
+flashsale-rs-c5dxj    1/1     Running   0          88s
+flashsale-rs-c745p    1/1     Running   0          19s
+flashsale-rs-ltmml    1/1     Running   0          19s
+flashsale-rs-sp94x    1/1     Running   0          88s
+flashsale-rs-wnxrv    1/1     Running   0          88s
+
+PS> kubectl delete pod flashsale-rs-c5dxj
+pod "flashsale-rs-c5dxj" deleted from default namespace
+
+PS> kubectl get pods
+NAME                  READY   STATUS    RESTARTS   AGE
+flashsale-rs-c745p    1/1     Running   0          105s
+flashsale-rs-ltmml    1/1     Running   0          105s
+flashsale-rs-sp94x    1/1     Running   0          2m54s
+flashsale-rs-wnxrv    1/1     Running   0          2m54s
+flashsale-rs-xddd5    1/1     Running   0          9s
+
+PS> kubectl get pods -o wide
+NAME                  READY   STATUS    RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+flashsale-rs-c745p    1/1     Running   0          112s   10.244.0.7   minikube   <none>           <none>
+flashsale-rs-ltmml    1/1     Running   0          112s   10.244.0.6   minikube   <none>           <none>
+flashsale-rs-sp94x    1/1     Running   0          3m1s   10.244.0.4   minikube   <none>           <none>
+flashsale-rs-wnxrv    1/1     Running   0          3m1s   10.244.0.5   minikube   <none>           <none>
+flashsale-rs-xddd5    1/1     Running   0          16s    10.244.0.8   minikube   <none>           <none>
+```
+
+Note `flashsale-rs-c5dxj` (deleted) was immediately replaced by `flashsale-rs-xddd5` — the ReplicaSet count stayed at 5 throughout.
 
 ## Notes
 
@@ -67,13 +118,13 @@ _(to fill in: actual output of each command above)_
 A: 3 (set in `spec.replicas` in `flashsale-replicaset.yaml`)
 
 **Q2. How many pods are running after applying the ReplicaSet configuration?**
-A: _(fill in from `kubectl get pods` output)_
+A: 3 — `flashsale-rs-c5dxj`, `flashsale-rs-sp94x`, `flashsale-rs-wnxrv`
 
 **Q3. What happens when you scale the ReplicaSet to 5 replicas?**
-A: Kubernetes creates 2 additional pods to reach the desired count of 5.
+A: Kubernetes created 2 additional pods (`flashsale-rs-c745p`, `flashsale-rs-ltmml`) to reach the desired count of 5.
 
 **Q4. What happens when you delete one pod?**
-A: The ReplicaSet controller notices the pod count dropped below the desired replica count and creates a new pod to replace it — this is the self-healing behavior.
+A: Deleting `flashsale-rs-c5dxj` triggered the ReplicaSet controller to immediately create a replacement (`flashsale-rs-xddd5`), keeping the total at 5 — this is the self-healing behavior.
 
 **Q5. How does Kubernetes maintain the desired number of replicas?**
 A: The ReplicaSet controller continuously compares the actual pod count against `spec.replicas` and creates or deletes pods as needed to match.
@@ -82,4 +133,4 @@ A: The ReplicaSet controller continuously compares the actual pod count against 
 A: 1 (started with `minikube start --nodes=1`)
 
 **Q7. Where are the pods running with respect to nodes?**
-A: _(fill in from `kubectl get pods -o wide` — with a single node, all pods run on that one `minikube` node)_
+A: All 5 pods ran on the single `minikube` node (IPs 10.244.0.4–10.244.0.8) — with only one node, there's nowhere else for them to go.
