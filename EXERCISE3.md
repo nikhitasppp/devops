@@ -69,7 +69,11 @@ flashsale-rs-wnxrv    1/1     Running   0          7s
 PS> kubectl get rs
 NAME           DESIRED   CURRENT   READY   AGE
 flashsale-rs   3         3         3       16s
+```
 
+![Minikube reset, image build, and initial 3 pods running](images/exercise3-setup.png)
+
+```
 PS> kubectl scale rs flashsale-rs --replicas=5
 replicaset.apps/flashsale-rs scaled
 
@@ -104,6 +108,8 @@ flashsale-rs-sp94x    1/1     Running   0          3m1s   10.244.0.4   minikube 
 flashsale-rs-wnxrv    1/1     Running   0          3m1s   10.244.0.5   minikube   <none>           <none>
 flashsale-rs-xddd5    1/1     Running   0          16s    10.244.0.8   minikube   <none>           <none>
 ```
+
+![Pod self-healing after delete, and distribution with -o wide](images/exercise3-selfheal-wide.png)
 
 Note `flashsale-rs-c5dxj` (deleted) was immediately replaced by `flashsale-rs-xddd5` — the ReplicaSet count stayed at 5 throughout.
 

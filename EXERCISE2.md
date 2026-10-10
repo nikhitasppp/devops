@@ -71,13 +71,19 @@ Press CTRL+C to quit
 PS> minikube service flask-app-service --url
 http://127.0.0.1:59186
 ! Because you are using a Docker driver on windows, the terminal needs to be open to run it.
+```
 
+![Deployment, pod logs, and minikube service URL](images/exercise2-deployment.png)
+
+```
 # in a second PowerShell window:
 PS> curl http://127.0.0.1:59186
 StatusCode        : 200
 StatusDescription : OK
 Content           : Hello from Flask on Kubernetes!
 ```
+
+![Successful curl response from the Flask app](images/exercise2-curl-success.png)
 
 ## Notes
 
