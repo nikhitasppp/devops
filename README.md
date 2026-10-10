@@ -10,7 +10,7 @@ Each exercise has a write-up at the root (`EXERCISE<n>.md`), with supporting cod
 - [x] Exercise 3 — Minikube Scaling with ReplicaSets
 - [x] Exercise 4 — Docker Networking
 - [x] Exercise 5 — Docker Security (AppArmor)
-- [ ] Exercise 6 — Grafana Real-time Monitoring
+- [x] Exercise 6 — Grafana Real-time Monitoring
 - [ ] Exercise 7 — Jenkins CI Automation
 - [ ] Exercise 8 — Jenkins Hello World Job
 - [ ] Exercise 9 — Jenkins Multi-Stage Pipeline
