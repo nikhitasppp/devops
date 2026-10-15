@@ -14,4 +14,4 @@ Each exercise has a write-up at the root (`EXERCISE<n>.md`), with supporting cod
 - [x] Exercise 7 — Jenkins CI Automation
 - [x] Exercise 8 — Jenkins Hello World Job
 - [x] Exercise 9 — Jenkins Multi-Stage Pipeline
-- [ ] Exercise 10 — Minikube Multi-Node Multi-App Deployment
+- [x] Exercise 10 — Minikube Multi-Node Multi-App Deployment
