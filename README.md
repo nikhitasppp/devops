@@ -12,6 +12,6 @@ Each exercise has a write-up at the root (`EXERCISE<n>.md`), with supporting cod
 - [x] Exercise 5 — Docker Security (AppArmor)
 - [x] Exercise 6 — Grafana Real-time Monitoring
 - [x] Exercise 7 — Jenkins CI Automation
-- [ ] Exercise 8 — Jenkins Hello World Job
+- [x] Exercise 8 — Jenkins Hello World Job
 - [ ] Exercise 9 — Jenkins Multi-Stage Pipeline
 - [ ] Exercise 10 — Minikube Multi-Node Multi-App Deployment
